@@ -22,16 +22,16 @@ public class SPCampaignStatistic extends CampaignStatistic<SPCampaignStatistic> 
 
   public SPCampaignStatistic(SPCampaignReport report) {
     super(report.getProfileId(),
-        report.getPortfolioId() == null ? null : Long.valueOf(report.getPortfolioId()),
-        report.getDate(),
-        report.getCampaignId(),
-        report.getCampaignName(),
-        report.getCampaignStatus(),
-        report.getClicks(),
-        report.getSpend(),
-        report.getImpressions(),
-        report.getSales14d() != null ? report.getSales14d() : report.getSales1d(),
-        report.getPurchases14d() != null ? report.getPurchases14d() : report.getPurchases1d());
+            report.getPortfolioId() == null ? null : Long.valueOf(report.getPortfolioId()),
+            report.getDate(),
+            report.getCampaignId(),
+            report.getCampaignName(),
+            report.getCampaignStatus(),
+            report.getClicks(),
+            report.getSpend(),
+            report.getImpressions(),
+            report.getSales14d() != null ? report.getSales14d() : report.getSales1d(),
+            report.getPurchases14d() != null ? report.getPurchases14d() : report.getPurchases1d());
 
     if (report.getPurchasesSameSku14d() != null)
       this.purchasesSameSku = report.getPurchasesSameSku14d();
@@ -48,16 +48,10 @@ public class SPCampaignStatistic extends CampaignStatistic<SPCampaignStatistic> 
     this.checkNameAndDate(other);
     this.checkStatusAndDate(other);
 
-    System.out.println("Before: Cost = " + this.cost + ", Other cost = " + other.getCost()); //Проверяем вычисления округления
     this.clicks += other.getClicks();
-    this.cost = this.cost.add(other.getCost()).round(ROUND);
-    System.out.println("After: Cost = " + this.cost); //Проверяем вычисления округления
-
-    System.out.println("Before: PurchasesSameSku = " + this.purchasesSameSku + ", Other purchasesSameSku = " + other.getPurchasesSameSku()); //Проверяем вычисления округления
+    this.cost = this.cost.add(other.getCost()).setScale(2, BigDecimal.ROUND_HALF_UP);
     this.impressions += other.getImpressions();
-    System.out.println("After: PurchasesSameSku = " + this.purchasesSameSku); //Проверяем вычисления округления
-
-    this.sales = this.sales.add(other.getSales()).round(ROUND);
+    this.sales = this.sales.add(other.getSales()).setScale(2, BigDecimal.ROUND_HALF_UP);
     this.purchases += other.getPurchases();
     this.purchasesSameSku += other.getPurchasesSameSku();
 
@@ -66,18 +60,16 @@ public class SPCampaignStatistic extends CampaignStatistic<SPCampaignStatistic> 
 
   @Override
   public void finalise() {
-    System.out.println("Before finalise: Sales = " + this.sales + ", Cost = " + this.cost); //Проверяем метод finalise()
     super.finalise();
 
-    this.sales = finalRound(this.sales);
-    this.cost = finalRound(this.cost);
-    System.out.println("After finalise: Sales = " + this.sales + ", Cost = " + this.cost); //Проверяем метод finalise()
+    this.sales = finalRound(this.sales).setScale(2, BigDecimal.ROUND_HALF_UP);
+    this.cost = finalRound(this.cost).setScale(2, BigDecimal.ROUND_HALF_UP);
 
     resetCounter();
   }
 
   public static SPCampaignStatistic createEmptyStatistic(
-      Long profileId, Long portfolioId, String date, Long campaignId, String campaignName, String state
+          Long profileId, Long portfolioId, String date, Long campaignId, String campaignName, String state
   ) {
     SPCampaignStatistic analytic = new SPCampaignStatistic();
     analytic.setProfileId(profileId);
