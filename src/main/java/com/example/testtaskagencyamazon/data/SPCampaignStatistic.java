@@ -48,9 +48,15 @@ public class SPCampaignStatistic extends CampaignStatistic<SPCampaignStatistic> 
     this.checkNameAndDate(other);
     this.checkStatusAndDate(other);
 
+    System.out.println("Before: Cost = " + this.cost + ", Other cost = " + other.getCost()); //Проверяем вычисления округления
     this.clicks += other.getClicks();
     this.cost = this.cost.add(other.getCost()).round(ROUND);
+    System.out.println("After: Cost = " + this.cost); //Проверяем вычисления округления
+
+    System.out.println("Before: PurchasesSameSku = " + this.purchasesSameSku + ", Other purchasesSameSku = " + other.getPurchasesSameSku()); //Проверяем вычисления округления
     this.impressions += other.getImpressions();
+    System.out.println("After: PurchasesSameSku = " + this.purchasesSameSku); //Проверяем вычисления округления
+
     this.sales = this.sales.add(other.getSales()).round(ROUND);
     this.purchases += other.getPurchases();
     this.purchasesSameSku += other.getPurchasesSameSku();
@@ -60,10 +66,12 @@ public class SPCampaignStatistic extends CampaignStatistic<SPCampaignStatistic> 
 
   @Override
   public void finalise() {
+    System.out.println("Before finalise: Sales = " + this.sales + ", Cost = " + this.cost); //Проверяем метод finalise()
     super.finalise();
 
     this.sales = finalRound(this.sales);
     this.cost = finalRound(this.cost);
+    System.out.println("After finalise: Sales = " + this.sales + ", Cost = " + this.cost); //Проверяем метод finalise()
 
     resetCounter();
   }
