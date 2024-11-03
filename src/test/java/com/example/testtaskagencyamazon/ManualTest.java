@@ -2,26 +2,23 @@ package com.example.testtaskagencyamazon;
 
 import com.example.testtaskagencyamazon.data.SPCampaignStatistic;
 
+import java.math.BigDecimal;
+
 public class ManualTest {
     public static void main(String[] args) {
-        // Создание экземпляра SPCampaignStatistic
         SPCampaignStatistic statistic = new SPCampaignStatistic();
+        statistic.finalise(); // Вызываем метод, который устанавливает итоговое значение
 
-        // Настройка необходимых данных
-        // Например можно установить некоторые поля
-        // statistic.setSomeField(value); // Установить необходимые значения
+        // Получаем итоговое значение
+        BigDecimal expectedValue = statistic.getFinalValue(); // Изменить на getFinalValue
+        // Ожидаемое значение установить в нужное
+        BigDecimal actualValue = statistic.getFinalValue();
 
-        // Вызов метода finalise
-        double result = statistic.finalise(); // Заменить на соответствующий метод
-
-        // Ожидаемое значение
-        double expected = 500.00; // Заменить на ожидаемое значение
-
-        // Сравнение результата
-        if (result == expected) {
-            System.out.println("Тест пройден: результат совпадает с ожидаемым.");
+        // Проверяем, совпадают ли ожидаемое и фактическое значения
+        if (expectedValue.compareTo(actualValue) == 0) {
+            System.out.println("Тест пройден: " + actualValue);
         } else {
-            System.out.println("Тест не пройден: ожидалось " + expected + ", но получено " + result);
+            System.out.println("Тест не пройден: ожидалось " + expectedValue + ", но получено " + actualValue);
         }
     }
 }

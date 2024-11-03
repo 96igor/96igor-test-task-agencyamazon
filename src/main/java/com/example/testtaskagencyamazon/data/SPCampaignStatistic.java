@@ -19,6 +19,7 @@ import lombok.ToString;
 public class SPCampaignStatistic extends CampaignStatistic<SPCampaignStatistic> implements Serializable {
 
   private Integer purchasesSameSku;
+  private BigDecimal finalValue;
 
   public SPCampaignStatistic(SPCampaignReport report) {
     super(report.getProfileId(),
@@ -61,6 +62,9 @@ public class SPCampaignStatistic extends CampaignStatistic<SPCampaignStatistic> 
   @Override
   public void finalise() {
     super.finalise();
+
+    // Здесь будет логика для вычисления итогового значения
+    this.finalValue = this.sales.add(this.cost); // Пример: итоговое значение как сумма продаж и затрат
 
     this.sales = finalRound(this.sales).setScale(2, BigDecimal.ROUND_HALF_UP);
     this.cost = finalRound(this.cost).setScale(2, BigDecimal.ROUND_HALF_UP);
